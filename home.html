@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Search</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    </head>
+    
+    <script>
+        $(document).ready(function(e) {   
+            $("#search-bar").on("keyup", function(event) {
+                var _this = $(this);
+                var search_word = _this.val();
+                $.ajax({
+                    url: "/search",
+                    data: { text: search_word },
+                    success: function(res) {
+                        res = JSON.parse(res);
+                        $("#words").empty();
+                        for (var i = 0; i < res.length; i++) {
+                           $("<option/>").html(res[i]).appendTo("#words");
+                        }
+                        // Trigger a refresh of the rendered datalist
+                        // Workaround using focus()
+                        _this.focus();
+                    }
+                });
+            });
+         });
+    </script>
+    
+    <body style="background-color: #eaeaea;">
+        <div class="container">
+        	<div class="row">
+                <div class="col-md-6">
+            		<h2>Custom search field</h2>
+                    <div id="custom-search-input">
+                        <div class="input-group col-md-12">
+                            <input id="search-bar" type="text"
+                                   class="form-control input-lg"
+                                   placeholder="Please enter to search"
+                                   list="words" />
+                            <datalist id="words"></datalist>
+                            <span class="input-group-btn">
+                                <button class="btn btn-info btn-lg" type="button">
+                                    <i class="glyphicon glyphicon-search"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+        	</div>
+        </div>
+    </body>
+</html>
